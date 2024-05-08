@@ -1,2 +1,2 @@
-# llm_genetic_programming
+# LLM-based Genetic Programming
 LLM-based genetic programming for tree-structures
