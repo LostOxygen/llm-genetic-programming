@@ -1,0 +1,9 @@
+psutil
+torch
+torchvision
+torchaudio
+accelerate
+tokenizers>=0.13.3
+transformers>=4.38.0
+huggingface-hub
+bitsandbytes @ git+https://github.com/TimDettmers/bitsandbytes
