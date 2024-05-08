@@ -1,5 +1,6 @@
 """main hook for the project"""
 import os
+import psutil
 import datetime
 import getpass
 import torch
@@ -21,8 +22,8 @@ def main(device: str) -> None:
     elif device == "mps" and torch.backends.mps.is_available():
         device = torch.device(device)
     else:
-        print(f"{TColors.WARNING}Warning{TColors.ENDC}: Device {device} is not available. " \
-               "Setting device to CPU instead.")
+        print(f"{TColors.WARNING}Warning{TColors.ENDC}: Device {TColors.OKCYAN}{device} " \
+              f"{TColors.ENDC} is not available. Setting device to CPU instead.")
         device = torch.device("cpu")
 
     print("\n"+"#"*os.get_terminal_size().columns)
@@ -35,7 +36,13 @@ def main(device: str) -> None:
     if torch.cuda.is_available():
         print(f"## {TColors.OKBLUE}{TColors.BOLD}GPU Memory{TColors.ENDC}: " \
               f"{torch.cuda.mem_get_info()[1] // 1024**2} MB")
-    print("\n"+"#"*os.get_terminal_size().columns)
+    elif torch.backends.mps.is_available():
+        print(f"## {TColors.OKBLUE}{TColors.BOLD}Shared Memory{TColors.ENDC}: " \
+              f"{psutil.virtual_memory()[0] // 1024**2} MB")
+    else:
+        print(f"## {TColors.OKBLUE}{TColors.BOLD}CPU Memory{TColors.ENDC}: " \
+              f"{psutil.virtual_memory()[0] // 1024**2} MB")
+    print("#"*os.get_terminal_size().columns)
 
 
 if __name__ == "__main__":
