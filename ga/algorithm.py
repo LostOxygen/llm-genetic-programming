@@ -1,5 +1,6 @@
 """helper class implementing the genetic algorithm"""
 
+from utils.colors import TColors
 from ga.chromosome import Chromosome
 from ga.operations import selection, mutate, cross_over, get_best, replace_worst
 
@@ -51,10 +52,12 @@ class GeneticAlgorithm:
         Returns:
             Chromosome - the best chromosome
         """
-
+        print(f"{TColors.OKCYAN}[INFO]{TColors.ENDC}: Computing the fitness of the " + \
+              "initial population")
         for i in range(len(self.population.list)):
             self.population.list[i].calculate_fitness(self.inputs, self.outputs)
 
+        print(f"{TColors.OKCYAN}[INFO]{TColors.ENDC}: Training the genetic algorithm")
         for i in range(self.iterations):
             if i % self.epoch_feedback == 0:
                 best_so_far = get_best(self.population)

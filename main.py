@@ -89,7 +89,6 @@ def main(
     # initialize the population
     pop = Population(pop_size, selection_size, functions, terminals, init_depth, max_depth)
 
-    print(f"{TColors.OKCYAN}[INFO]{TColors.ENDC}: Training the genetic algorithm")
     # create and train the genetic algorithm
     algo = GeneticAlgorithm(pop, train_iterations, inputs, labels)
     best = algo.train()
