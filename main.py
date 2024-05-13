@@ -70,7 +70,8 @@ def main(
     print(f"## {TColors.OKBLUE}{TColors.BOLD}Training Iterations{TColors.ENDC}: {train_iterations}")
     print("#"*os.get_terminal_size().columns)
 
-    print(f"{TColors.CYAN}[INFO]{TColors.ENDC}: Defining functions, variables/terminals, and targets")
+    print(f"{TColors.OKCYAN}[INFO]{TColors.ENDC}: " + \
+          "Defining functions, variables/terminals, and targets")
     # define functions and terminals (variables of the functions)
     functions = {1: ["sin","cos","e","ln","tg","tanh","abs"], 2:["+", "-", "*", "/"]}
     terminals = ["x"+str(i) for i in range(num_vars)]
@@ -79,21 +80,21 @@ def main(
     def target_func(x: float) -> float:
         return torch.sin(x) * x / 2
 
-    print(f"{TColors.CYAN}[INFO]{TColors.ENDC}: Creating input and label data")
+    print(f"{TColors.OKCYAN}[INFO]{TColors.ENDC}: Creating input and label data")
     # create input and label data
     inputs = [[x] for x in torch.arange(0, 100, 0.01)]
     labels = [[target_func(x[0])] for x in inputs]
 
-    print(f"{TColors.CYAN}[INFO]{TColors.ENDC}: Initializing the population")
+    print(f"{TColors.OKCYAN}[INFO]{TColors.ENDC}: Initializing the population")
     # initialize the population
     pop = Population(pop_size, selection_size, functions, terminals, init_depth, max_depth)
 
-    print(f"{TColors.CYAN}[INFO]{TColors.ENDC}: Training the genetic algorithm")
+    print(f"{TColors.OKCYAN}[INFO]{TColors.ENDC}: Training the genetic algorithm")
     # create and train the genetic algorithm
     algo = GeneticAlgorithm(pop, train_iterations, inputs, labels)
     best = algo.train()
 
-    print(f"{TColors.CYAN}[INFO]{TColors.ENDC}: Getting predictions and plotting the results")
+    print(f"{TColors.OKCYAN}[INFO]{TColors.ENDC}: Getting predictions and plotting the results")
     # get predictions and plot the results
     print(best.gen)
     predictions = [[best.evaluate_arg(x)] for x in inputs]
