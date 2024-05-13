@@ -177,31 +177,35 @@ class Chromosome:
         return self.fitness
 
 
-    def __get_depth_aux(self, poz: int = 0):
+    def __get_depth_aux(self, curr_pos: int = 0):
         """
         Function to get the depth of a chromosome
 
         Parameters:
+            curr_pos: int - current position in genotype
 
-        @return: chromosome's depth, last pos
+        Returns:
+            Tuple - chromosome's depth, last pos
         """
-        elem = self.gen[poz]
+        elem = self.gen[curr_pos]
 
         if elem in self.func_set[2]:
-            left, poz = self.__get_depth_aux(poz + 1)
-            right, poz = self.__get_depth_aux(poz)
+            left, curr_pos = self.__get_depth_aux(curr_pos + 1)
+            right, curr_pos = self.__get_depth_aux(curr_pos)
 
-            return 1 + max(left, right), poz
+            return 1 + max(left, right), curr_pos
         elif elem in self.func_set[1]:
-            left, poz = self.__get_depth_aux(poz + 1)
-            return left + 1, poz
+            left, curr_pos = self.__get_depth_aux(curr_pos + 1)
+            return left + 1, curr_pos
         else:
-            return 1, poz + 1
+            return 1, curr_pos + 1
 
 
     def get_depth(self):
         """
         Function to get the depth of a chromosome
-        @return: - chromosome's depth
+       
+        Returns:
+            int - chromosome's depth
         """
         return self.__get_depth_aux()[0] - 1
