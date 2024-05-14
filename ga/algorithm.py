@@ -59,7 +59,7 @@ class GeneticAlgorithm:
 
         print(f"{TColors.OKCYAN}[INFO]{TColors.ENDC}: Training the genetic algorithm")
         for i in range(self.iterations):
-            if i % self.epoch_feedback == 0:
+            if i % 100 == 0:
                 best_so_far = get_best(self.population)
                 print(f"Best function: {best_so_far.gen}")
                 print(f"Best fitness: {best_so_far.fitness}")

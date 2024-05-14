@@ -78,7 +78,7 @@ def main(
 
     # define the target function
     def target_func(x: float) -> float:
-        return torch.sin(x) * x / 2
+        return torch.sin(x) + (1/x) + torch.cos(x)
 
     print(f"{TColors.OKCYAN}[INFO]{TColors.ENDC}: Creating input and label data")
     # create input and label data
@@ -107,12 +107,13 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="llm-genetic-programming")
     parser.add_argument("--device", "-d", type=str, default="cuda",
                         help="specifies the device to run the computations on (cpu, cuda, mps)")
-    parser.add_argument("--num_vars", "-n", type=int, default=1, help="number of variables/terminals")
+    parser.add_argument("--num_vars", "-n", type=int, default=1,
+                        help="number of variables/terminals")
     parser.add_argument("--pop_size", "-p", type=int, default=4000, help="population size")
     parser.add_argument("--selection_size", "-s", type=int, default=20, help="selection size")
     parser.add_argument("--init_depth", "-i", type=int, default=6, help="initial depth of the tree")
     parser.add_argument("--max_depth", "-m", type=int, default=20, help="maximum depth of the tree")
-    parser.add_argument("--train_iterations", "-t", type=int, default=4000, 
+    parser.add_argument("--train_iterations", "-t", type=int, default=4000,
                         help="number of training iterations")
     args = parser.parse_args()
     main(**vars(args))

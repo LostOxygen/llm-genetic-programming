@@ -1,6 +1,6 @@
 """library for genetic algorithm operations"""
 
-import torch
+import numpy as np
 import random
 from ga.chromosome import Chromosome
 from ga.population import Population
@@ -35,7 +35,7 @@ def mutate(chromosome: Chromosome) -> Chromosome:
     Returns:
         Chromosome - the mutated chromosome
     """
-    poz = torch.random.randint(len(chromosome.gen))
+    poz = np.random.randint(len(chromosome.gen))
     if chromosome.gen[poz] in chromosome.func_set[1] + chromosome.func_set[2]:
         if chromosome.gen[poz] in chromosome.func_set[1]:
             chromosome.gen[poz] = random.choice(chromosome.func_set[1])
@@ -79,11 +79,11 @@ def cross_over(mommy: Chromosome, daddy: Chromosome, max_depth: int) -> Chromoso
         Chromosome - the new child chromosome
     """
     child = Chromosome(mommy.terminal_set, mommy.func_set, mommy.depth, None)
-    start_m = torch.random.randint(len(mommy.gen))
-    start_f = torch.random.randint(len(daddy.gen))
+    start_m = np.random.randint(len(mommy.gen))
+    start_d = np.random.randint(len(daddy.gen))
     end_m = traversal(start_m, mommy)
-    end_f = traversal(start_f, daddy)
-    child.gen = mommy.gen[:start_m] + daddy.gen[start_f : end_f] + mommy.gen[end_m :]
+    end_f = traversal(start_d, daddy)
+    child.gen = mommy.gen[:start_m] + daddy.gen[start_d : end_f] + mommy.gen[end_m :]
     if child.get_depth() > max_depth and random.random() > 0.2:
         child = Chromosome(mommy.terminal_set, mommy.func_set, mommy.depth)
     return child

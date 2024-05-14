@@ -160,15 +160,7 @@ class Chromosome:
         """
         diff = 0
         for i in range(len(inputs)):
-            try:
-                diff += (self.eval(inputs[i])[0] - labels[i][0])**2
-            except RuntimeWarning:
-                self.gen = []
-                if random.random() > 0.5:
-                    self.grow()
-                else:
-                    self.full()
-                self.calculate_fitness(inputs, labels)
+            diff += (self.eval(inputs[i])[0] - labels[i][0])**2
 
         if len(inputs) == 0:
             return 1e9
