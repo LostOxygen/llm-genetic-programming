@@ -4,6 +4,7 @@ import psutil
 import datetime
 import getpass
 import torch
+import numpy as np
 import argparse
 import matplotlib.pyplot as plt
 
@@ -51,10 +52,10 @@ def main(
           f"{torch.get_num_threads()} CPU cores with {os.cpu_count()} threads and " \
           f"{torch.cuda.device_count()} GPUs on user: {getpass.getuser()}")
     print(f"## {TColors.OKBLUE}{TColors.BOLD}Device{TColors.ENDC}: {device}")
-    if torch.cuda.is_available():
+    if device == "cuda" and torch.cuda.is_available():
         print(f"## {TColors.OKBLUE}{TColors.BOLD}GPU Memory{TColors.ENDC}: " \
               f"{torch.cuda.mem_get_info()[1] // 1024**2} MB")
-    elif torch.backends.mps.is_available():
+    elif device == "mps" and torch.backends.mps.is_available():
         print(f"## {TColors.OKBLUE}{TColors.BOLD}Shared Memory{TColors.ENDC}: " \
               f"{psutil.virtual_memory()[0] // 1024**2} MB")
     else:
@@ -73,16 +74,25 @@ def main(
     print(f"{TColors.OKCYAN}[INFO]{TColors.ENDC}: " + \
           "Defining functions, variables/terminals, and targets")
     # define functions and terminals (variables of the functions)
-    functions = {1: ["sin", "cos", "e", "ln", "tg", "tanh", "abs"], 2:["+", "-", "*", "/"]}
+    functions = {
+        1: ["sin", "cos", "e", "ln", "tg", "tanh", "abs"],
+        2: ["+", "-", "*", "/"],
+    }
     terminals = ["x"+str(i) for i in range(num_vars)]
 
     # define the target function
     def target_func(x: float) -> float:
-        return torch.sin(x) + (1/x) + torch.cos(x)
+        result = 0.1 * x**2 * np.sin(x)
+
+        if np.isinf(result):
+            return 1e10
+        elif np.isnan(result):
+            return 0
+        return result
 
     print(f"{TColors.OKCYAN}[INFO]{TColors.ENDC}: Creating input and label data")
     # create input and label data
-    inputs = [[x] for x in torch.arange(0, 100, 0.01)]
+    inputs = [[x] for x in np.arange(-10, 10, 0.001)]
     labels = [[target_func(x[0])] for x in inputs]
 
     print(f"{TColors.OKCYAN}[INFO]{TColors.ENDC}: Initializing the population")
@@ -105,7 +115,7 @@ def main(
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="llm-genetic-programming")
-    parser.add_argument("--device", "-d", type=str, default="cuda",
+    parser.add_argument("--device", "-d", type=str, default="cpu",
                         help="specifies the device to run the computations on (cpu, cuda, mps)")
     parser.add_argument("--num_vars", "-n", type=int, default=1,
                         help="number of variables/terminals")

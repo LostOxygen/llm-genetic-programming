@@ -1,9 +1,9 @@
 """Chromosome class implementation"""
 
 import random
-import torch
-#import warnings
-#warnings.filterwarnings("error")
+import numpy as np
+import warnings
+warnings.filterwarnings("error")
 
 class Chromosome:
     """
@@ -115,21 +115,21 @@ class Chromosome:
             curr_pos_op = curr_pos
             left, curr_pos = self.eval(func_input, curr_pos + 1)
             if self.gen[curr_pos_op] == "sin":
-                return torch.sin(left), curr_pos
+                return np.sin(left), curr_pos
             elif self.gen[curr_pos_op] == "cos":
-                return torch.cos(left), curr_pos
+                return np.cos(left), curr_pos
             elif self.gen[curr_pos_op] == "ln":
-                return torch.log(left), curr_pos
+                return np.log(left), curr_pos
             elif self.gen[curr_pos_op] == "sqrt":
-                return torch.sqrt(left), curr_pos
+                return np.sqrt(left), curr_pos
             elif self.gen[curr_pos_op] == "tg":
-                return torch.tan(left), curr_pos
+                return np.tan(left), curr_pos
             elif self.gen[curr_pos_op] == "ctg":
-                return 1/torch.tan(left), curr_pos
+                return 1/np.tan(left), curr_pos
             elif self.gen[curr_pos_op] == "e":
-                return torch.exp(left), curr_pos
+                return np.exp(left), curr_pos
             elif self.gen[curr_pos_op] == "tanh":
-                return torch.tanh(left), curr_pos
+                return np.tanh(left), curr_pos
             elif self.gen[curr_pos_op] == "abs":
                 return abs(left), curr_pos
 
@@ -160,7 +160,17 @@ class Chromosome:
         """
         diff = 0
         for i in range(len(inputs)):
-            diff += (self.eval(inputs[i])[0] - labels[i][0])**2
+            try:
+                diff += (self.eval(inputs[i])[0] - labels[i][0])**2
+            except RuntimeWarning:
+                # if a runtime warning occurs, we will reinitialize the chromosome and
+                # calculate the fitness again (this is a workaround for the division by 0 error)
+                self.gen = []
+                if random.random() > 0.5:
+                    self.grow()
+                else:
+                    self.full()
+                self.calculate_fitness(inputs, labels)
 
         if len(inputs) == 0:
             return 1e9
