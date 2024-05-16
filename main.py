@@ -73,7 +73,7 @@ def main(
     print(f"{TColors.OKCYAN}[INFO]{TColors.ENDC}: " + \
           "Defining functions, variables/terminals, and targets")
     # define functions and terminals (variables of the functions)
-    functions = {1: ["sin","cos","e","ln","tg","tanh","abs"], 2:["+", "-", "*", "/"]}
+    functions = {1: ["sin", "cos", "e", "ln", "tg", "tanh", "abs"], 2:["+", "-", "*", "/"]}
     terminals = ["x"+str(i) for i in range(num_vars)]
 
     # define the target function
