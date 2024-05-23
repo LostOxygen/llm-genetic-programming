@@ -1,4 +1,5 @@
 """helper class implementing the genetic algorithm"""
+from tqdm import tqdm
 
 from utils.colors import TColors
 from ga.chromosome import Chromosome
@@ -54,7 +55,7 @@ class GeneticAlgorithm:
         """
         print(f"{TColors.OKCYAN}[INFO]{TColors.ENDC}: Computing the fitness of the " + \
               "initial population")
-        for i in range(len(self.population.list)):
+        for i in tqdm(range(len(self.population.list))):
             self.population.list[i].calculate_fitness(self.inputs, self.outputs)
 
         print(f"{TColors.OKCYAN}[INFO]{TColors.ENDC}: Training the genetic algorithm")

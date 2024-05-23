@@ -8,3 +8,4 @@ transformers>=4.38.0
 huggingface-hub
 bitsandbytes @ git+https://github.com/TimDettmers/bitsandbytes
 matplotlib
+tqdm

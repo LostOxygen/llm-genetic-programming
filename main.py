@@ -92,7 +92,7 @@ def main(
 
     print(f"{TColors.OKCYAN}[INFO]{TColors.ENDC}: Creating input and label data")
     # create input and label data
-    inputs = [[x] for x in np.arange(-15, 15, 0.001)]
+    inputs = [[x] for x in np.arange(-50, 50, 0.001)]
     labels = [[target_func(x[0])] for x in inputs]
 
     print(f"{TColors.OKCYAN}[INFO]{TColors.ENDC}: Initializing the population")
@@ -105,12 +105,14 @@ def main(
 
     print(f"{TColors.OKCYAN}[INFO]{TColors.ENDC}: Getting predictions and plotting the results")
     # get predictions and plot the results
-    print(best.gen)
+    print(f"{TColors.OKCYAN}[INFO]{TColors.ENDC} Best Gen: "+ str(best.gen))
     predictions = [[best.evaluate_arg(x)] for x in inputs]
 
-    plt.plot(inputs, labels, color="b", dashes=[6, 2], label="target function")
-    plt.plot(inputs, predictions, color="r", dashes=[6, 3], label="predicted function")
-    plt.show()
+    with plt.xkcd():
+        plt.plot(inputs, labels, color="b", dashes=[6, 2], label="target function")
+        plt.plot(inputs, predictions, color="r", dashes=[6, 3], label="predicted function")
+        plt.legend()
+        plt.show()
 
 
 if __name__ == "__main__":
@@ -119,10 +121,10 @@ if __name__ == "__main__":
                         help="specifies the device to run the computations on (cpu, cuda, mps)")
     parser.add_argument("--num_vars", "-n", type=int, default=1,
                         help="number of variables/terminals")
-    parser.add_argument("--pop_size", "-p", type=int, default=5000, help="population size")
-    parser.add_argument("--selection_size", "-s", type=int, default=40, help="selection size")
-    parser.add_argument("--init_depth", "-i", type=int, default=8, help="initial depth of the tree")
-    parser.add_argument("--max_depth", "-m", type=int, default=30, help="maximum depth of the tree")
+    parser.add_argument("--pop_size", "-p", type=int, default=4000, help="population size")
+    parser.add_argument("--selection_size", "-s", type=int, default=20, help="selection size")
+    parser.add_argument("--init_depth", "-i", type=int, default=6, help="initial depth of the tree")
+    parser.add_argument("--max_depth", "-m", type=int, default=20, help="maximum depth of the tree")
     parser.add_argument("--train_iterations", "-t", type=int, default=10000,
                         help="number of training iterations")
     args = parser.parse_args()
