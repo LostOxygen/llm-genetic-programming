@@ -35,7 +35,9 @@ def main(
     """
 
     # set the devices correctly
-    if device != "cpu" and device == "cuda" and torch.cuda.is_available():
+    if device == "cpu":
+        device = torch.device("cpu")
+    elif device != "cpu" and device == "cuda" and torch.cuda.is_available():
         device = torch.device(device)
     elif device != "cpu" and device == "mps" and torch.backends.mps.is_available():
         device = torch.device(device)
@@ -121,11 +123,11 @@ if __name__ == "__main__":
                         help="specifies the device to run the computations on (cpu, cuda, mps)")
     parser.add_argument("--num_vars", "-n", type=int, default=1,
                         help="number of variables/terminals")
-    parser.add_argument("--pop_size", "-p", type=int, default=4000, help="population size")
+    parser.add_argument("--pop_size", "-p", type=int, default=1000, help="population size")
     parser.add_argument("--selection_size", "-s", type=int, default=20, help="selection size")
     parser.add_argument("--init_depth", "-i", type=int, default=6, help="initial depth of the tree")
     parser.add_argument("--max_depth", "-m", type=int, default=20, help="maximum depth of the tree")
-    parser.add_argument("--train_iterations", "-t", type=int, default=10000,
+    parser.add_argument("--train_iterations", "-t", type=int, default=30000,
                         help="number of training iterations")
     args = parser.parse_args()
     main(**vars(args))
